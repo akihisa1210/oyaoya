@@ -1,0 +1,14 @@
+{
+    "name": "akihisa1210/oyaoya",
+    "autoload": {
+        "psr-4": {
+            "Akihisa1210\\Oyaoya\\": "src/"
+        }
+    },
+    "require": {},
+    "config": {
+        "platform": {
+            "php": "8.3"
+        }
+    }
+}
