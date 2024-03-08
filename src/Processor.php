@@ -11,11 +11,13 @@ class Processor
     private function convertToKana()
     {
         $escaped_text = escapeshellcmd($this->text);
+        $escaped_text_size = strlen($escaped_text);
         $output = null;
         $retval = null;
 
-        // mecab -Oyomiは与えられた文字列をカタカナに変換する
-        exec("echo {$escaped_text} | mecab -Oyomi", $output, $retval);
+        // -Oyomiは与えられた文字列をカタカナに変換する
+        // -bは入力文字列のバイト数（指定しないと、文字列が長いときにエラーが発生する）
+        exec("echo {$escaped_text} | mecab -Oyomi -b {$escaped_text_size}", $output, $retval);
 
         if ($retval !== 0) {
             throw new \Exception("mecab exited with status {$retval}");
