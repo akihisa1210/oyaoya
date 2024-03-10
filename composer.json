@@ -11,7 +11,7 @@
         }
     },
     "scripts": {
-        "lint": "phpstan analyse -l 9 src tests",
+        "lint": "phpstan",
         "test": "phpunit tests"
     },
     "require-dev": {
