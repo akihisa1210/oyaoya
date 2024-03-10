@@ -8,7 +8,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Akihisa1210\Oyaoya\Processor;
 
-class ProcessorTest extends TestCase
+final class ProcessorTest extends TestCase
 {
     /**
      * @return array<array<string|int>>
