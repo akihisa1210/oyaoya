@@ -24,4 +24,6 @@ jobs:
         run: |
           # cat ./composer.json
           # composer test
+          php -v
+          php -i
           vendor/bin/phpunit tests/ProcessorTest.php
