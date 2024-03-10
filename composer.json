@@ -5,6 +5,11 @@
             "Akihisa1210\\Oyaoya\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Akihisa1210\\Oyaoya\\": "tests"
+        }
+    },
     "config": {
         "platform": {
             "php": "8.3"
