@@ -1,4 +1,4 @@
-<?
+<?php
 
 namespace Akihisa1210\Oyaoya;
 
