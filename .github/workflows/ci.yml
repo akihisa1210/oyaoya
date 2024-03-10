@@ -22,4 +22,6 @@ jobs:
       # - name: PHPStan
       #   run: composer lint
       - name: PHPUnit
-        run: phpunit --testsuite default
+        run: |
+          php test_class_exists.php
+          phpunit --testsuite default
