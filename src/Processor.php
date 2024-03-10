@@ -8,7 +8,7 @@ class Processor
     {
     }
 
-    private function convertToKana()
+    private function convertToKana(): string
     {
         $escaped_text = escapeshellcmd($this->text);
         $escaped_text_size = strlen($escaped_text);
@@ -28,12 +28,13 @@ class Processor
         return $output[0];
     }
 
-    public function countInNICOLA()
+    public function countInNICOLA(): int
     {
+        // TODO 文字コードを指定する
         return mb_strlen($this->convertToKana());
     }
 
-    public function countInRomaji()
+    public function countInRomaji(): int
     {
         // TODO countInNICOLAとcountInRomajiの両方でconvertToKana()を呼び出しており非効率
         $chars = mb_str_split($this->convertToKana());
