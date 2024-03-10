@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+require('vendor/autoload.php');
+
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Akihisa1210\Oyaoya\Processor;
