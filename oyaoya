@@ -6,7 +6,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\SingleCommandApplication;
-use Akihisa1210\Oyaoya\Processor;
+use Akihisa1210\Oyaoya\UseCase\ShowKeystrokesUseCase;
 
 (new SingleCommandApplication())
     ->setName('Oyaoya')
@@ -14,9 +14,14 @@ use Akihisa1210\Oyaoya\Processor;
     ->addArgument('text', InputArgument::OPTIONAL, 'Text to count')
     ->setCode(function (InputInterface $input, OutputInterface $output): int {
         $text = $input->getArgument('text') ?? stream_get_contents(STDIN);
-        $processor = new Processor($text);
-        $output->writeln("NICOLA: " . $processor->countInNICOLA());
-        $output->writeln("Romaji: " . $processor->countInRomaji());
+
+        $show_keystrokes = new ShowKeystrokesUseCase();
+        $result = $show_keystrokes->execute($text);
+
+        foreach ($result->get() as $input_method => $count) {
+            $output->writeln($input_method . ": " . $count);
+        }
+
         return 0;
     })
     ->run();
