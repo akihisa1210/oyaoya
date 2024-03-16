@@ -9,7 +9,7 @@ use Symfony\Component\Console\SingleCommandApplication;
 use Akihisa1210\Oyaoya\UseCase\ShowKeystrokesUseCase;
 
 (new SingleCommandApplication())
-    ->setName('Oyaoya')
+    ->setName('oyaoya')
     ->setVersion('1.0.0')
     ->addArgument('text', InputArgument::OPTIONAL, 'Text to count')
     ->setCode(function (InputInterface $input, OutputInterface $output): int {
