@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Akihisa1210\Oyaoya\Domain\RawText;
-use Akihisa1210\Oyaoya\Domain\RomajiKeystrokes;
-use Akihisa1210\Oyaoya\Domain\ToKanaTextPreprocessor;
-use Akihisa1210\Oyaoya\External\MecabKana;
+use Akihisa1210\Oyaoya\Domain\RomajiCounter;
+use Akihisa1210\Oyaoya\External\MecabKanaConverter;
 
-class RomajiKeyStrokesTest extends TestCase
+class RomajiCounterTest extends TestCase
 {
     /**
      * @return array<array<string|int>>
@@ -40,20 +38,16 @@ class RomajiKeyStrokesTest extends TestCase
         ];
     }
 
-
     /**
      * @param string $text
      * @param integer $expected
      * @return void
      */
     #[DataProvider("romajiTextProvider")]
-    public function testCountI(string $text, int $expected)
+    public function testCountInRomaji(string $text, int $expected)
     {
-        $kana = new MecabKana();
-        $to_kana_text_preprocessor = new ToKanaTextPreprocessor($kana);
-        $romaji_keystrokes = new RomajiKeystrokes($to_kana_text_preprocessor);
-        $raw_text = new RawText($text);
-        $result = $romaji_keystrokes->count($raw_text);
-        $this->assertEquals($expected, $result->count);
+        $romaji_counter = new RomajiCounter(new MecabKanaConverter());
+        $result = $romaji_counter->count($text);
+        $this->assertEquals($expected, $result->keystrokes);
     }
 }

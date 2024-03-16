@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Akihisa1210\Oyaoya\UseCase;
 
 use Akihisa1210\Oyaoya\Domain\InputMethodEnum;
-use Akihisa1210\Oyaoya\Domain\KeystrokesCount;
+use Akihisa1210\Oyaoya\Domain\Keystrokes;
 
-class ShowKeystrokesResult
+readonly final class ShowKeystrokesResult
 {
-    public function __construct(private KeystrokesCount $nicola_count, private KeystrokesCount $romaji_count)
+    public function __construct(private Keystrokes $nicola_keystrokes, private Keystrokes $romaji_keystrokes)
     {
     }
 
@@ -19,8 +19,8 @@ class ShowKeystrokesResult
     public function get(): array
     {
         return [
-            InputMethodEnum::NICOLA => $this->nicola_count->count,
-            InputMethodEnum::ROMAJI => $this->romaji_count->count
+            InputMethodEnum::NICOLA => $this->nicola_keystrokes->keystrokes,
+            InputMethodEnum::ROMAJI => $this->romaji_keystrokes->keystrokes
         ];
     }
 }

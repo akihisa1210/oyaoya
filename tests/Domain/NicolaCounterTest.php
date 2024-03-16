@@ -4,17 +4,15 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Akihisa1210\Oyaoya\Domain\NicolaKeystrokes;
-use Akihisa1210\Oyaoya\Domain\RawText;
-use Akihisa1210\Oyaoya\Domain\ToKanaTextPreprocessor;
-use Akihisa1210\Oyaoya\External\MecabKana;
+use Akihisa1210\Oyaoya\Domain\NicolaCounter;
+use Akihisa1210\Oyaoya\External\MecabKanaConverter;
 
-class NicolaKeystrokesTest extends TestCase
+class NicolaCounterTest extends TestCase
 {
     /**
      * @return array<array<string|int>>
      */
-    public static function NICOLETextProvider(): array
+    public static function NicolaTextProvider(): array
     {
         return [
             ["ア", 1],
@@ -32,14 +30,11 @@ class NicolaKeystrokesTest extends TestCase
      * @param integer $expected
      * @return void
      */
-    #[DataProvider("NICOLETextProvider")]
+    #[DataProvider("NicolaTextProvider")]
     public function testCountKeystrokesInNICOLA(string $text, int $expected)
     {
-        $kana = new MecabKana();
-        $to_kana_text_preprocessor = new ToKanaTextPreprocessor($kana);
-        $nicola_keystrokes = new NicolaKeystrokes($to_kana_text_preprocessor);
-        $raw_text = new RawText($text);
-        $result = $nicola_keystrokes->count($raw_text);
-        $this->assertEquals($expected, $result->count);
+        $nicola_counter = new NicolaCounter(new MecabKanaConverter());
+        $result = $nicola_counter->count($text);
+        $this->assertEquals($expected, $result->keystrokes);
     }
 }

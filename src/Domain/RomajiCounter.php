@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace Akihisa1210\Oyaoya\Domain;
 
-class RomajiKeystrokes implements KeystrokesInterface
-{
-    public function __construct(readonly public ToKanaTextPreprocessor $preprocessor)
-    {
+use Akihisa1210\Oyaoya\External\KanaConverterInterface;
 
+readonly final class RomajiCounter implements CounterInterface
+{
+    public function __construct(public KanaConverterInterface $kana_converter)
+    {
     }
 
-    public function count(RawText $raw_text): KeystrokesCount
+    public function count(string $text): Keystrokes
     {
-        $processed_text = $this->preprocessor->process($raw_text);
+        $converted_text = $this->kana_converter->convert($text);
 
-        $chars = mb_str_split($processed_text->text);
+        $chars = mb_str_split($converted_text);
 
         // アイウエオは1打鍵
         // キシチニヒミリギジヂビピは後ろに小さい文字が来ると3打鍵で入力できる拗音になりうる
@@ -80,6 +81,6 @@ class RomajiKeystrokes implements KeystrokesInterface
             }
         }
 
-        return new KeystrokesCount($count);
+        return new Keystrokes($count);
     }
 }

@@ -4,7 +4,7 @@ namespace Akihisa1210\Oyaoya\External;
 
 use Exception;
 
-class MecabKana implements KanaInterface
+final class MecabKanaConverter implements KanaConverterInterface
 {
     public function convert(string $text): string
     {

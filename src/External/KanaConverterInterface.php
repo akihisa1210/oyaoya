@@ -2,7 +2,7 @@
 
 namespace Akihisa1210\Oyaoya\External;
 
-interface KanaInterface
+interface KanaConverterInterface
 {
     public function convert(string $text): string;
 }
