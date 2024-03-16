@@ -1,43 +1,22 @@
 <?php
 
-namespace Akihisa1210\Oyaoya;
+declare(strict_types=1);
 
-class Processor
+namespace Akihisa1210\Oyaoya\Domain;
+
+use Akihisa1210\Oyaoya\External\KanaConverterInterface;
+
+readonly final class RomajiCounter implements CounterInterface
 {
-    public function __construct(readonly private string $text)
+    public function __construct(public KanaConverterInterface $kana_converter)
     {
     }
 
-    private function convertToKana(): string
+    public function count(string $text): Keystrokes
     {
-        $escaped_text = escapeshellcmd($this->text);
-        $escaped_text_size = strlen($escaped_text);
-        $output = null;
-        $retval = null;
+        $converted_text = $this->kana_converter->convert($text);
 
-        // -Oyomiは与えられた文字列をカタカナに変換する
-        // -bは入力文字列のバイト数（指定しないと、文字列が長いときにエラーが発生する）
-        exec("echo {$escaped_text} | mecab -Oyomi -b {$escaped_text_size}", $output, $retval);
-
-        if ($retval !== 0) {
-            throw new \Exception("mecab exited with status {$retval}");
-        }
-
-        // TODO 変換結果に漢字が残っていたら落とす
-
-        return $output[0];
-    }
-
-    public function countInNICOLA(): int
-    {
-        // TODO 文字コードを指定する
-        return mb_strlen($this->convertToKana());
-    }
-
-    public function countInRomaji(): int
-    {
-        // TODO countInNICOLAとcountInRomajiの両方でconvertToKana()を呼び出しており非効率
-        $chars = mb_str_split($this->convertToKana());
+        $chars = mb_str_split($converted_text);
 
         // アイウエオは1打鍵
         // キシチニヒミリギジヂビピは後ろに小さい文字が来ると3打鍵で入力できる拗音になりうる
@@ -102,6 +81,6 @@ class Processor
             }
         }
 
-        return $count;
+        return new Keystrokes($count);
     }
 }
