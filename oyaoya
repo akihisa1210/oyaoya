@@ -14,6 +14,9 @@ use Akihisa1210\Oyaoya\UseCase\ShowKeystrokesUseCase;
     ->addArgument('text', InputArgument::OPTIONAL, 'Text to count')
     ->setCode(function (InputInterface $input, OutputInterface $output): int {
         $text = $input->getArgument('text') ?? stream_get_contents(STDIN);
+        if (!is_string($text)) {
+            throw new RuntimeException("Argument must be string!");
+        }
 
         $show_keystrokes = new ShowKeystrokesUseCase();
         $result = $show_keystrokes->execute($text);
