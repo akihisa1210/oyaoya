@@ -6,6 +6,8 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Akihisa1210\Oyaoya\Domain\RawText;
 use Akihisa1210\Oyaoya\Domain\RomajiKeystrokes;
+use Akihisa1210\Oyaoya\Domain\ToKanaTextPreprocessor;
+use Akihisa1210\Oyaoya\External\MecabKana;
 
 class RomajiKeyStrokesTest extends TestCase
 {
@@ -47,8 +49,10 @@ class RomajiKeyStrokesTest extends TestCase
     #[DataProvider("romajiTextProvider")]
     public function testCountI(string $text, int $expected)
     {
+        $kana = new MecabKana();
+        $to_kana_text_preprocessor = new ToKanaTextPreprocessor($kana);
+        $romaji_keystrokes = new RomajiKeystrokes($to_kana_text_preprocessor);
         $raw_text = new RawText($text);
-        $romaji_keystrokes = new RomajiKeystrokes();
         $result = $romaji_keystrokes->count($raw_text);
         $this->assertEquals($expected, $result->count);
     }

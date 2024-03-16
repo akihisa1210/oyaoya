@@ -6,6 +6,8 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Akihisa1210\Oyaoya\Domain\NicolaKeystrokes;
 use Akihisa1210\Oyaoya\Domain\RawText;
+use Akihisa1210\Oyaoya\Domain\ToKanaTextPreprocessor;
+use Akihisa1210\Oyaoya\External\MecabKana;
 
 class NicolaKeystrokesTest extends TestCase
 {
@@ -33,8 +35,10 @@ class NicolaKeystrokesTest extends TestCase
     #[DataProvider("NICOLETextProvider")]
     public function testCountKeystrokesInNICOLA(string $text, int $expected)
     {
+        $kana = new MecabKana();
+        $to_kana_text_preprocessor = new ToKanaTextPreprocessor($kana);
+        $nicola_keystrokes = new NicolaKeystrokes($to_kana_text_preprocessor);
         $raw_text = new RawText($text);
-        $nicola_keystrokes = new NicolaKeystrokes();
         $result = $nicola_keystrokes->count($raw_text);
         $this->assertEquals($expected, $result->count);
     }

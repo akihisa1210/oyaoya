@@ -6,10 +6,14 @@ namespace Akihisa1210\Oyaoya\Domain;
 
 class RomajiKeystrokes implements KeystrokesInterface
 {
+    public function __construct(readonly public ToKanaTextPreprocessor $preprocessor)
+    {
+
+    }
+
     public function count(RawText $raw_text): KeystrokesCount
     {
-        $to_kana_text_preprocessor = new ToKanaTextPreprocessor();
-        $processed_text = $to_kana_text_preprocessor->process($raw_text);
+        $processed_text = $this->preprocessor->process($raw_text);
 
         $chars = mb_str_split($processed_text->text);
 
@@ -76,7 +80,6 @@ class RomajiKeystrokes implements KeystrokesInterface
             }
         }
 
-        $result = new KeystrokesCount($count);
-        return $result;
+        return new KeystrokesCount($count);
     }
 }
