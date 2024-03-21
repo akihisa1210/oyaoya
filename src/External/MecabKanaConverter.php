@@ -8,21 +8,35 @@ final class MecabKanaConverter implements KanaConverterInterface
 {
     public function convert(string $text): string
     {
-        $escaped_text = escapeshellcmd($text);
-        $escaped_text_size = strlen($escaped_text);
-        $output = null;
-        $retval = null;
-
-        // -Oyomiは与えられた文字列をカタカナに変換する
-        // -bは入力文字列のバイト数（指定しないと、文字列が長いときにエラーが発生する）
-        exec("echo {$escaped_text} | mecab -Oyomi -b {$escaped_text_size}", $output, $retval);
-
-        if ($retval !== 0) {
-            throw new Exception("mecab exited with status {$retval}");
+        $tempFile = tempnam(sys_get_temp_dir(), 'oyaoya_');
+        if ($tempFile === false) {
+            throw new Exception("failed to create temporary file to reading the given text");
         }
 
-        // TODO 変換結果に漢字が残っていたら落とす
+        try {
+            file_put_contents($tempFile, $text);
 
-        return $output[0];
+            $text_size = strlen($text);
+            $output = null;
+            $retval = null;
+
+            // -Oyomiは与えられた文字列をカタカナに変換する（ただし、一部の漢字は残る）
+            // -bは入力文字列のバイト数（指定しないと、文字列が長いときにエラーが発生する）
+            exec("cat {$tempFile} | mecab -Oyomi -b {$text_size}", $output, $retval);
+            unlink($tempFile);
+
+            if ($retval !== 0) {
+                // TODO 標準エラー出力を取得してエラーメッセージを表示する
+                throw new Exception("exec() exited with status {$retval}");
+            }
+
+            return implode('', $output);
+        } catch (Exception $e) {
+            throw $e;
+        } finally {
+            if (file_exists($tempFile)) {
+                unlink($tempFile);
+            }
+        }
     }
 }
