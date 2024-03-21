@@ -19,6 +19,6 @@ composer install
 
 ```sh
 $ echo "打鍵数カウント" | ./oyaoya
-NICOLA: 7
-Romaji: 9
+NICOLA: 9
+Romaji: 14
 ```
